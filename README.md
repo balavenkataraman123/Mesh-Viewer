@@ -1,4 +1,5 @@
 # Mesh-Viewer
+# Warning: This is a fork that I have played around with but I did not write it. I did not write the rest of the readme either.
 
 A C++/OpenGL mesh viewer for OBJ format models.
 
