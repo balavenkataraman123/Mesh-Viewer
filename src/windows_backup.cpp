@@ -1,6 +1,6 @@
 #include <iostream>
 
-
+#include <windows.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -54,7 +54,7 @@ int main() {
     glfwSetScrollCallback(window, scroll_callback);
 
     ShaderProgram program("../src/shader/common.vert", "../src/shader/phong.frag");
-    Model currentmodel("../resource/katana/starsword.obj", &program);
+    Model lumine("../resource/lumine/Lumine.obj", &program);
     camera = new ModelRotationCamera({0.0f, 10.0f, 0.0f}, 20.0f);
     lastTime = glfwGetTime();
 
@@ -83,7 +83,7 @@ int main() {
         program.setVec3("light.ambient", lightAmbient);
         program.setVec3("light.diffuse", lightColor);
         program.setVec3("light.specular", lightColor);
-        currentmodel.draw();
+        lumine.draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

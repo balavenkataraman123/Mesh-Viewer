@@ -8,7 +8,6 @@
 #include <string>
 #include <unordered_map>
 
-#include <windows.h>
 #include <glad/glad.h>
 
 #include "material.h"

@@ -1,10 +1,16 @@
 #include <iostream>
 
+#include <GL/freeglut.h>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <GLES2/gl2.h>
+#include <EGL/egl.h>
+
+// https://github.com/g-truc/glm
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/component_wise.hpp>
 
 #include <plog/Log.h>
 #include <plog/Initializers/RollingFileInitializer.h>
@@ -13,17 +19,15 @@
 #include "mesh.h"
 #include "camera.h"
 
+
+bool keys[256];
+
 int width = 1600, height = 900;
 float lastTime;
 Camera *camera = nullptr;
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+void mouse(int button, int state, int x, int y ){}
 
-void cursor_position_callback(GLFWwindow *window, double x, double y);
-
-void scroll_callback(GLFWwindow* window, double x, double y);
-
-void handle_keyboard(GLFWwindow* window, float deltaTime);
 
 int main() {
     plog::init(plog::warning);
@@ -52,9 +56,10 @@ int main() {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetScrollCallback(window, scroll_callback);
+    glutMouseWheelFunc(scroll_callback);
 
     ShaderProgram program("../src/shader/common.vert", "../src/shader/phong.frag");
-    Model currentmodel("../resource/katana/starsword.obj", &program);
+    Model lumine("../resource/lumine/Lumine.obj", &program);
     camera = new ModelRotationCamera({0.0f, 10.0f, 0.0f}, 20.0f);
     lastTime = glfwGetTime();
 
@@ -83,7 +88,7 @@ int main() {
         program.setVec3("light.ambient", lightAmbient);
         program.setVec3("light.diffuse", lightColor);
         program.setVec3("light.specular", lightColor);
-        currentmodel.draw();
+        lumine.draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -100,26 +105,59 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void cursor_position_callback(GLFWwindow *window, double x, double y) {
-    bool pressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
-    if (camera != nullptr) camera->handleMouseInput(x, y, pressed);
+//void cursor_position_callback(GLFWwindow *window, double x, double y) {
+//    bool pressed = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+//    if (camera != nullptr) camera->handleMouseInput(x, y, pressed);
+//}
+
+
+void mouse(int button, int state, int x, int y ){
+  if (state == GLUT_DOWN) {
+    switch(button) {
+    case GLUT_LEFT_BUTTON:
+
+        if (camera != nullptr) camera->handleMouseInput((double) x, (double) y, true);
+        break;
+    case 3:  //mouse wheel scrolls
+        if (camera != nullptr) camera->handleScrollInput( (double)(-y));
+        break;
+    case 4:
+        if (camera != nullptr) camera->handleScrollInput((double) y);       
+        break;
+    default:
+        break;
+    }
+    
+    }
+    else{
+    if (camera != nullptr) camera->handleMouseInput(x, y, false);
+    }   
+    
 }
 
-void scroll_callback(GLFWwindow* window, double x, double y) {
-    if (camera != nullptr) camera->handleScrollInput(y);
+void KeyboardDown( int key, int x, int y ) {
+    if ( isalpha( key ) ) {
+        key = toupper( key );
+    }
+    keys[ key ] = true;
 }
-
-void handle_keyboard(GLFWwindow* window, float deltaTime) {
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        if (camera != nullptr) camera->handleKeyboardInput(GLFW_KEY_W, deltaTime);
+void KeyboardUp( int key, int x, int y ) {
+    if ( isalpha( key ) ) {
+        key = toupper( key );
     }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        if (camera != nullptr) camera->handleKeyboardInput(GLFW_KEY_A, deltaTime);
+    keys[ key ] = false;        
+}
+void handle_keyboard(float deltaTime) {
+    if ( keys['W'] ) {
+        if (camera != nullptr) camera->handleKeyboardInput('W', deltaTime);
+    } 
+    if ( keys['A'] ) {
+        if (camera != nullptr) camera->handleKeyboardInput('A', deltaTime);
     }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        if (camera != nullptr) camera->handleKeyboardInput(GLFW_KEY_S, deltaTime);
+    if ( keys['S'] ) {
+        if (camera != nullptr) camera->handleKeyboardInput('S', deltaTime);
     }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        if (camera != nullptr) camera->handleKeyboardInput(GLFW_KEY_D, deltaTime);
-    }
+    if ( keys['D'] ) {
+        if (camera != nullptr) camera->handleKeyboardInput('D', deltaTime);
+    }    
 }

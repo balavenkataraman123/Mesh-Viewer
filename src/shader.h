@@ -9,7 +9,7 @@
 #include <fstream>
 #include <filesystem>
 
-#include <windows.h>
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 

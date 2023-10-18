@@ -27,7 +27,7 @@ public:
 
     virtual void handleMouseInput(float x, float y, bool pressed);
 
-    virtual void handleKeyboardInput(int key, float deltaTime);
+    virtual void handleKeyboardInput(char key, float deltaTime);
 
     virtual void handleScrollInput(float y);
 
@@ -55,7 +55,7 @@ public:
 
     void handleMouseInput(float x, float y, bool pressed) override;
 
-    void handleKeyboardInput(int key, float deltaTime) override;
+    void handleKeyboardInput(char key, float deltaTime) override;
 
     void handleScrollInput(float y) override;
 

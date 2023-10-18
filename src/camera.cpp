@@ -4,7 +4,6 @@
 
 #include "camera.h"
 
-#include <glfw/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 static const float cameraMouseSpeed = 0.05f,
@@ -42,14 +41,14 @@ void Camera::handleMouseInput(float x, float y, bool pressed) {
     lastMouse[1] = y;
 }
 
-void Camera::handleKeyboardInput(int key, float deltaTime) {
-    if (key == GLFW_KEY_W) {
+void Camera::handleKeyboardInput(char key, float deltaTime) {
+    if (key == 'W') {
         position += front * cameraKeyboardSpeed * deltaTime;
-    } else if (key == GLFW_KEY_S) {
+    } else if (key == 'S') {
         position -= front * cameraKeyboardSpeed * deltaTime;
-    } else if (key == GLFW_KEY_A) {
+    } else if (key == 'A') {
         position -= right * cameraKeyboardSpeed * deltaTime;
-    } else if (key == GLFW_KEY_D) {
+    } else if (key == 'D') {
         position += right * cameraKeyboardSpeed * deltaTime;
     }
 }
@@ -87,7 +86,7 @@ void ModelRotationCamera::handleMouseInput(float x, float y, bool pressed) {
     lastMouse[1] = y;
 }
 
-void ModelRotationCamera::handleKeyboardInput(int key, float deltaTime) {
+void ModelRotationCamera::handleKeyboardInput(char key, float deltaTime) {
     Camera::handleKeyboardInput(key, deltaTime);
     center = position + front * distance;
 }

@@ -397,7 +397,15 @@ namespace objl
 		template <class T>
 		inline const T & getElement(const std::vector<T> &elements, std::string &index)
 		{
-			int idx = std::stoi(index);
+			std::cout << "could this be the cause?   " << index <<  std::endl;
+			int idx;
+			try{
+			 idx = std::stoi(index);
+			}
+			catch(...){
+			 idx = 0;
+			}
+			std::cout << "nvm lolz" << std::endl;
 			if (idx < 0)
 				idx = int(elements.size()) + idx;
 			else

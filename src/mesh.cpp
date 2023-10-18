@@ -3,7 +3,6 @@
 //
 
 #include "mesh.h"
-
 #include <OBJ_Loader.h>
 
 Mesh::Mesh(const objl::Mesh &mesh, Material *material) :
